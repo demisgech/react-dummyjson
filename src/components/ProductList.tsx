@@ -1,8 +1,11 @@
 import useProducts from "../hooks/useProducts";
 import Spinner from "./Spinner";
 
-const ProductList = () => {
-  const { products, error, isLoading } = useProducts();
+interface Props {
+  selectedCategory: string;
+}
+const ProductList = ({ selectedCategory }: Props) => {
+  const { products, error, isLoading } = useProducts(selectedCategory);
 
   if (isLoading) return <Spinner isLoading={isLoading} />;
 

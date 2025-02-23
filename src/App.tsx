@@ -1,13 +1,7 @@
-import ProductCategoryList from "./components/ProductCategoryList";
-import ProductList from "./components/ProductList";
+import ProductApp from "./components/ProductApp";
 
 function App() {
-  return (
-    <div className="p-2">
-      <ProductCategoryList />
-      <ProductList />
-    </div>
-  );
+  return <ProductApp />;
 }
 
 export default App;

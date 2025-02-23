@@ -1,16 +1,36 @@
+import { FormEvent, useRef } from "react";
 import useProductCategoryList from "../hooks/useProductCategoryList";
 
-const ProductCategoryList = () => {
-  const { categories } = useProductCategoryList();
+interface Props {
+  onSelectCategory: (category: string) => void;
+}
 
+const ProductCategoryList = ({ onSelectCategory }: Props) => {
+  const { categories } = useProductCategoryList();
+  const inputRef = useRef<HTMLSelectElement>(null);
+
+  const handleSelectChange = (event: FormEvent) => {
+    event.preventDefault();
+    if (inputRef.current && inputRef.current.value)
+      onSelectCategory(inputRef.current.value);
+  };
   return (
-    <select className="block w-[100%] p-1 border-1 border-gray-500 rounded-md text-gray-700 outline-0 text-2xl">
+    <select
+      ref={inputRef}
+      onChange={handleSelectChange}
+      value={inputRef.current ? inputRef.current.value : ""}
+      className="block w-[100%] p-1 border-1 border-gray-500 rounded-md text-gray-700 outline-0 text-2xl"
+    >
       <option value="" className="text-green-700 outline-0">
         Select category...
       </option>
       {categories &&
-        categories.map((category) => (
-          <option className="text-green-700 outline-0" value={category}>
+        categories.map((category, index) => (
+          <option
+            className="text-green-700 outline-0"
+            key={index}
+            value={category}
+          >
             {category}
           </option>
         ))}
