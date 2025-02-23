@@ -15,26 +15,32 @@ const ProductCategoryList = ({ onSelectCategory }: Props) => {
       onSelectCategory(inputRef.current.value);
   };
   return (
-    <select
-      ref={inputRef}
-      onChange={handleSelectChange}
-      value={inputRef.current ? inputRef.current.value : ""}
-      className="block w-[100%] p-1 border-1 border-gray-500 rounded-md text-gray-700 outline-0 text-2xl"
-    >
-      <option value="" className="text-green-700 outline-0">
-        Select category...
-      </option>
-      {categories &&
-        categories.map((category, index) => (
-          <option
-            className="text-green-700 outline-0"
-            key={index}
-            value={category}
-          >
-            {category}
-          </option>
-        ))}
-    </select>
+    <>
+      <label htmlFor="category" className="py-2 pl-3 text-lg">
+        Filter
+      </label>
+      <select
+        id="category"
+        ref={inputRef}
+        onChange={handleSelectChange}
+        value={inputRef.current ? inputRef.current.value : ""}
+        className="block w-[100%] p-1 border-1 border-gray-500 rounded-md text-gray-700 outline-0 text-lg"
+      >
+        <option value="" className="text-green-700 outline-0">
+          Select category...
+        </option>
+        {categories &&
+          categories.map((category, index) => (
+            <option
+              className="text-green-700 outline-0"
+              key={index}
+              value={category}
+            >
+              {category}
+            </option>
+          ))}
+      </select>
+    </>
   );
 };
 

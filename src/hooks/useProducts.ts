@@ -43,7 +43,7 @@ const useProducts = (selectedCategory: string) => {
     return () => controller.abort();
   }, [selectedCategory]);
 
-  return { products, error, isLoading };
+  return { products, error, isLoading, setProducts, setError };
 };
 
 export default useProducts;
