@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import apiClient from "../services/api-client";
+import { AxiosError, CanceledError } from "axios";
 
 interface Product {
   id: number;
@@ -12,22 +13,33 @@ interface Product {
 interface FetchPrductResponse {
   products: Product[];
 }
+
 const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
+  const [error, setError] = useState("");
   useEffect(() => {
+    const controller = new AbortController();
     apiClient
-      .get<FetchPrductResponse>("/products")
+      .get<FetchPrductResponse>("/products", {
+        signal: controller.signal,
+      })
       .then(({ data }) => {
         // console.log(response.data);
         setProducts(data.products);
       })
       .catch((error) => {
-        console.error(error);
+        // console.error(error);
+        if (error instanceof CanceledError) return;
+        setError((error as AxiosError).message);
       });
+
+    return () => controller.abort();
   }, []);
+
+  if (error) return <div className="text-red-500">{error}</div>;
   return (
     <div className="p-2">
-      <ul className="list-none py-2 outline-0 border-gray-500 border-1 rounded-md overflow-hidden">
+      <ul className="list-none outline-0 border-gray-500 border-1 rounded-md overflow-hidden last:border-b-0">
         {products.map((product) => (
           <li
             key={product.id}
