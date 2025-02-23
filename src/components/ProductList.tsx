@@ -1,48 +1,11 @@
-import { useEffect, useState } from "react";
-import apiClient from "../services/api-client";
-import { AxiosError, CanceledError } from "axios";
-
-interface Product {
-  id: number;
-  title: string;
-  description: string;
-  category: string;
-  price: number;
-}
-
-interface FetchPrductResponse {
-  products: Product[];
-}
+import useProducts from "../hooks/useProducts";
 
 const ProductList = () => {
-  const [products, setProducts] = useState<Product[]>([]);
-  const [error, setError] = useState("");
-  const [isLoading, setLoading] = useState(false);
-  useEffect(() => {
-    const controller = new AbortController();
-    setLoading(true);
-    apiClient
-      .get<FetchPrductResponse>("/products", {
-        signal: controller.signal,
-      })
-      .then(({ data }) => {
-        // console.log(response.data);
-        setLoading(false);
-        setProducts(data.products);
-      })
-      .catch((error) => {
-        // console.error(error);
-        if (error instanceof CanceledError) return;
-        setError((error as AxiosError).message);
-        setLoading(false);
-      });
-
-    return () => controller.abort();
-  }, []);
+  const { products, error, isLoading } = useProducts();
 
   if (isLoading)
     return (
-      <div className="w-3 h-3 p-4 rounded-full border-3 border-green-400 border-t-0 animate-spin" />
+      <div className="w-3 h-3 p-4 rounded-full border-3 border-green-400 border-t-0 border-l-0 animate-spin" />
     );
 
   if (error) return <div className="text-red-500">{error}</div>;
