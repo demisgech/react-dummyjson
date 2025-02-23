@@ -17,26 +17,36 @@ interface FetchPrductResponse {
 const ProductList = () => {
   const [products, setProducts] = useState<Product[]>([]);
   const [error, setError] = useState("");
+  const [isLoading, setLoading] = useState(false);
   useEffect(() => {
     const controller = new AbortController();
+    setLoading(true);
     apiClient
       .get<FetchPrductResponse>("/products", {
         signal: controller.signal,
       })
       .then(({ data }) => {
         // console.log(response.data);
+        setLoading(false);
         setProducts(data.products);
       })
       .catch((error) => {
         // console.error(error);
         if (error instanceof CanceledError) return;
         setError((error as AxiosError).message);
+        setLoading(false);
       });
 
     return () => controller.abort();
   }, []);
 
+  if (isLoading)
+    return (
+      <div className="w-3 h-3 p-4 rounded-full border-3 border-green-400 border-t-0 animate-spin" />
+    );
+
   if (error) return <div className="text-red-500">{error}</div>;
+
   return (
     <div className="p-2">
       <ul className="list-none outline-0 border-gray-500 border-1 rounded-md overflow-hidden last:border-b-0">
